@@ -1,0 +1,109 @@
+{{template "base" .}}
+
+{{define "title"}}Transmission Sector (Admin){{end}}
+
+{{define "main"}}
+    <p style="opacity: 0.7; font-size: 0.9em; border-bottom: 1px dotted var(--text-color); padding-bottom: 1rem;">
+        > Sector: Transmission Protocol. Interface for data injection to root database.
+    </p>
+
+    <div class="admin-panel">
+        <form class="injection-form" method="POST" action="/admin/add">
+            <div class="form-group">
+                <label for="title">> Transmission Title:</label>
+                <input type="text" id="title" name="title" required autocomplete="off" placeholder="e.g. Neuromancer">
+            </div>
+
+            <div class="form-group row-group">
+                <div class="group-half">
+                    <label for="type">> Payload Type:</label>
+                    <select id="type" name="type" required>
+                        <option value="thought">Organic Thought [sys.log]</option>
+                        <option value="book">Book [b_ok]</option>
+                        <option value="anime">Anime / TV [anim]</option>
+                        <option value="tool">Software Tool [exec]</option>
+                        <option value="log">System Log [data]</option>
+                        <option value="game">Video Game [game]</option>
+                    </select>
+                </div>
+                <div class="group-half">
+                    <label for="url">> Optional External Link:</label>
+                    <input type="url" id="url" name="url" placeholder="https://..." autocomplete="off">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="content">> Content Payload:</label>
+                <textarea id="content" name="content" required rows="6" placeholder="Execute thought transfer..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Run Injection Protocol</button>
+        </form>
+    </div>
+
+    <!-- UI Logic / Styles for the Admin Form -->
+    <style>
+        .admin-panel {
+            margin-top: 2rem;
+            max-width: 700px;
+            border: 1px dashed var(--text-color);
+            padding: 2rem;
+            background: rgba(255,255,255,0.01);
+        }
+        .injection-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .row-group {
+            flex-direction: row;
+            gap: 1rem;
+        }
+        .group-half {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        label {
+            font-size: 0.85rem;
+            font-family: 'Courier Prime', monospace;
+            color: var(--accent-color);
+        }
+        input, select, textarea {
+            background: #121212;
+            border: 1px solid #333;
+            color: var(--text-color);
+            padding: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        .submit-btn {
+            background: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .submit-btn:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+    </style>
+{{end}}

@@ -49,9 +49,11 @@ func main() {
 	mux := http.NewServeMux()
 
 	// Define the routes for our sectors
-	mux.HandleFunc("/", app.homeHandler)
-	mux.HandleFunc("/media", app.mediaHandler)
-	mux.HandleFunc("/thoughts", app.thoughtsHandler)
+	mux.HandleFunc("GET /", app.homeHandler)
+	mux.HandleFunc("GET /media", app.mediaHandler)
+	mux.HandleFunc("GET /thoughts", app.thoughtsHandler)
+	mux.HandleFunc("GET /admin/add", app.createEntryHandler)
+	mux.HandleFunc("POST /admin/add", app.createEntryPostHandler)
 
 	log.Println("Starting server on :4000")
 	err = http.ListenAndServe(":4000", mux)
@@ -117,4 +119,43 @@ func (app *application) thoughtsHandler(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		http.Error(w, "Internal Server Error", 500)
 	}
+}
+
+// createEntryHandler renders the admin form GET /admin/add
+func (app *application) createEntryHandler(w http.ResponseWriter, r *http.Request) {
+	ts, err := template.ParseFiles("./ui/html/base.tmpl", "./ui/html/pages/create.tmpl")
+	if err != nil {
+		http.Error(w, "Internal Server Error", 500)
+		return
+	}
+
+	err = ts.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		http.Error(w, "Internal Server Error", 500)
+	}
+}
+
+// createEntryPostHandler processes the form submission POST /admin/add
+func (app *application) createEntryPostHandler(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Bad Request", 400)
+		return
+	}
+
+	title := r.PostForm.Get("title")
+	entryType := r.PostForm.Get("type")
+	content := r.PostForm.Get("content")
+	url := r.PostForm.Get("url")
+
+	// Insert into SQLite database
+	_, err = app.entries.Insert(title, entryType, content, url)
+	if err != nil {
+		log.Println("Database insert error:", err)
+		http.Error(w, "Internal Server Error", 500)
+		return
+	}
+
+	// Redirect back to root to drop them into the appropriate sector automatically
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
