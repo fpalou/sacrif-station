@@ -1,0 +1,92 @@
+{{template "base" .}}
+
+{{define "title"}}Media Compendium Sector{{end}}
+
+{{define "main"}}
+    <p style="opacity: 0.7; font-size: 0.9em; border-bottom: 1px dotted var(--text-color); padding-bottom: 1rem;">
+        > Sector: Media Compendium. Tracking external input.
+    </p>
+    
+    <div class="organic-grid">
+        {{if .}}
+            {{range .}}
+            <div class="entry-card type-{{.Type}}">
+                <div class="folder-header">
+                    <span class="type-icon">
+                        {{if eq .Type "book"}}[b_ok]{{else if eq .Type "anime"}}[anim]{{else if eq .Type "tool"}}[exec]{{else if eq .Type "log"}}[sys.]{{else}}[data]{{end}}
+                    </span>
+                    <span class="entry-date">{{.CreatedAt.Format "Jan 02, 2006"}}</span>
+                </div>
+                <h3>{{.Title}}</h3>
+                <div class="entry-content">
+                    <p>{{.Content}}</p>
+                </div>
+                {{if .URL}}
+                    <a href="{{.URL}}" target="_blank" class="entry-link">>> Launch External</a>
+                {{end}}
+            </div>
+            {{end}}
+        {{else}}
+            <p>> No media logged yet.</p>
+        {{end}}
+    </div>
+
+    <!-- UI Logic / Styles for the Grid -->
+    <style>
+        .organic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .entry-card {
+            border: 1px dashed var(--text-color);
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, background 0.2s, border-color 0.2s;
+            position: relative;
+        }
+        .entry-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.05);
+            border-style: solid;
+        }
+        .folder-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            border-bottom: 1px dotted var(--text-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+        .entry-card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.05rem;
+        }
+        .entry-content p {
+            font-size: 0.85rem;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .entry-link {
+            margin-top: auto; /* Pushes to bottom */
+            padding-top: 1rem;
+            font-size: 0.75rem;
+            display: inline-block;
+        }
+        
+        .type-book { border-top: 3px solid #8e44ad; }
+        .type-anime { border-top: 3px solid #e74c3c; }
+        .type-tool { border-top: 3px solid #3498db; }
+        .type-log { border-top: 3px solid var(--accent-color); }
+        
+        .type-book:hover { border-color: #8e44ad; }
+        .type-anime:hover { border-color: #e74c3c; }
+        .type-tool:hover { border-color: #3498db; }
+        .type-log:hover { border-color: var(--accent-color); }
+    </style>
+{{end}}

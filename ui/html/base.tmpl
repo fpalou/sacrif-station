@@ -1,0 +1,72 @@
+{{define "base"}}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{template "title" .}} - Sacrif Station</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Fonts: A solid monospace or classic sans-serif font for that older internet vibe -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+        
+        <!-- HTMX -->
+        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+
+        <style>
+            :root {
+                --bg-color: #1a1a1a;
+                --text-color: #e0e0e0;
+                --accent-color: #4CAF50;
+            }
+            body { 
+                background-color: var(--bg-color); 
+                color: var(--text-color); 
+                font-family: 'IBM Plex Mono', monospace; 
+                margin: 0; 
+                padding: 2rem;
+                max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+                line-height: 1.6;
+            }
+            header {
+                border-bottom: 2px dashed var(--text-color);
+                padding-bottom: 1rem;
+                margin-bottom: 2rem;
+            }
+            h1 { color: var(--accent-color); font-weight: 600; }
+            a { color: var(--accent-color); text-decoration: none; }
+            a:hover { text-decoration: underline; }
+            .content-area {
+                min-height: 50vh;
+            }
+            footer {
+                margin-top: 3rem;
+                font-size: 0.8rem;
+                text-align: center;
+                opacity: 0.6;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>>_ Sacrif Station</h1>
+            <nav>
+                <a href="/">[root]</a> 
+                <a href="/media">[media_compendium]</a>
+                <a href="/thoughts">[organic_thoughts]</a>
+            </nav>
+        </header>
+
+        <main class="content-area">
+            {{template "main" .}}
+        </main>
+        
+        <footer>
+            <p>Connection Established. Operator: Leo/Sacrif. Powered by Go + HTMX.</p>
+        </footer>
+    </body>
+</html>
+{{end}}

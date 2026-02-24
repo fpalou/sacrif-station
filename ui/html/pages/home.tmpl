@@ -1,0 +1,22 @@
+{{template "base" .}}
+
+{{define "title"}}Root Domain{{end}}
+
+{{define "main"}}
+    <p style="opacity: 0.7; font-size: 0.9em; border-bottom: 1px dotted var(--text-color); padding-bottom: 1rem;">
+        > Connection established. Select destination.
+    </p>
+    
+    <div style="margin-top: 2rem;">
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 1rem;">
+                <a href="/media" style="font-size: 1.2rem; font-weight: bold; border-left: 3px solid #e74c3c; padding-left: 10px;">>> Media Compendium Sector</a>
+                <p style="margin: 0.2rem 0 0 13px; font-size: 0.85rem; opacity: 0.8;">An organic collection of books, anime, tools, and external links.</p>
+            </li>
+            <li>
+                <a href="/thoughts" style="font-size: 1.2rem; font-weight: bold; border-left: 3px solid #f1c40f; padding-left: 10px;">>> Organic Thoughts Sector</a>
+                <p style="margin: 0.2rem 0 0 13px; font-size: 0.85rem; opacity: 0.8;">Internal logs, written thoughts, and unstructured notes.</p>
+            </li>
+        </ul>
+    </div>
+{{end}}
