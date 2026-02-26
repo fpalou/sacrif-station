@@ -1,0 +1,23 @@
+{{define "title"}}Data Scraper{{end}}
+
+{{define "main"}}
+<h2>> Data Scraper Operations</h2>
+
+<p>This sector interfaces directly with a secondary dataset (<code>scraper.db</code>). This division of data allows for heavy scraping operations, transient data storage, and aggressive cleanup without risking the integrity of the primary media compendium.</p>
+
+<div class="entries-list">
+    {{if .}}
+        {{range .}}
+            <article class="entry" style="border: 1px solid var(--text-color); padding: 1rem; margin-bottom: 1rem;">
+                <h3>{{.Title}}</h3>
+                <div class="meta" style="font-size: 0.9em; opacity: 0.8; margin-bottom: 0.5rem;">
+                    [ID: {{.ID}}] 
+                </div>
+                <div class="content" style="white-space: pre-wrap;">{{.Value}}</div>
+            </article>
+        {{end}}
+    {{else}}
+        <p style="opacity: 0.7; font-style: italic;">No scraped data has been accumulated yet. The scraper database is currently empty.</p>
+    {{end}}
+</div>
+{{end}}
