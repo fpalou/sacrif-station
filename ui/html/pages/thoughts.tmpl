@@ -10,14 +10,18 @@
     <div class="thoughts-list">
         {{if .}}
             {{range .}}
-            <article class="thought-entry">
+            <article class="thought-entry {{.Type}}">
                 <header class="thought-header">
-                    <span class="type-icon">[sys.log]</span>
+                    <span class="type-icon">
+                        {{if eq .Type "thought_stationai"}}[sys.ai]
+                        {{else if eq .Type "thought_admin"}}[sys.admin]
+                        {{else}}[sys.log]{{end}}
+                    </span>
                     <time class="thought-date">{{.CreatedAt.Format "Jan 02, 2006 at 15:04"}}</time>
                 </header>
                 <h3 class="thought-title">{{.Title}}</h3>
                 <div class="thought-content">
-                    <p>{{.Content}}</p>
+                    {{renderMarkdown .Content}}
                 </div>
             </article>
             {{end}}
@@ -64,6 +68,19 @@
             font-size: 1.2rem;
             color: #f1c40f;
         }
+        
+        /* Station AI Specific Overrides */
+        .thought-entry.thought_stationai {
+            border-left-color: #e74c3c;
+        }
+        .thought-entry.thought_stationai::before {
+            background: #e74c3c;
+        }
+        .thought-entry.thought_stationai .thought-title {
+            color: #e74c3c;
+            font-family: 'Courier Prime', monospace;
+            text-transform: uppercase;
+        }
         .thought-content {
             font-size: 0.95rem;
             line-height: 1.6;
@@ -74,6 +91,26 @@
         }
         .thought-content p:last-child {
             margin: 0;
+        }
+        /* Markdown generated lists and blockquotes styling */
+        .thought-content ul, .thought-content ol {
+            margin: 0 0 1rem 1.5rem;
+            padding: 0;
+        }
+        .thought-content pre {
+            background: #222;
+            padding: 1rem;
+            border: 1px dotted #555;
+            overflow-x: auto;
+        }
+        .thought-content code {
+            font-family: 'IBM Plex Mono', monospace;
+            background: #333;
+            padding: 0.1rem 0.3rem;
+        }
+        .thought-content pre code {
+            background: transparent;
+            padding: 0;
         }
     </style>
 {{end}}

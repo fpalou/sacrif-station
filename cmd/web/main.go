@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/federicopalou/sacrif-station/internal/models"
+	"github.com/gomarkdown/markdown"
 	"github.com/joho/godotenv"
 	_ "modernc.org/sqlite"
 )
@@ -120,7 +121,7 @@ func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
 // mediaHandler renders the Media Compendium (everything EXCEPT thoughts/logs)
 func (app *application) mediaHandler(w http.ResponseWriter, r *http.Request) {
 	// Let's fetch the latest 50 entries that are NOT "thought"
-	latestEntries, err := app.entries.LatestExcluded("thought", 50)
+	latestEntries, err := app.entries.MediaEntries(50)
 	if err != nil {
 		http.Error(w, "Internal Server Error", 500)
 		return
@@ -141,13 +142,19 @@ func (app *application) mediaHandler(w http.ResponseWriter, r *http.Request) {
 // thoughtsHandler renders the Organic Thoughts Sector (ONLY thoughts/logs)
 func (app *application) thoughtsHandler(w http.ResponseWriter, r *http.Request) {
 	// Fetch the latest 50 thought entries
-	latestEntries, err := app.entries.LatestByType("thought", 50)
+	latestEntries, err := app.entries.LatestThoughts(50)
 	if err != nil {
 		http.Error(w, "Internal Server Error", 500)
 		return
 	}
 
-	ts, err := template.ParseFiles("./ui/html/base.tmpl", "./ui/html/pages/thoughts.tmpl")
+	funcs := template.FuncMap{
+		"renderMarkdown": func(text string) template.HTML {
+			return template.HTML(markdown.ToHTML([]byte(text), nil, nil))
+		},
+	}
+
+	ts, err := template.New("base.tmpl").Funcs(funcs).ParseFiles("./ui/html/base.tmpl", "./ui/html/pages/thoughts.tmpl")
 	if err != nil {
 		http.Error(w, "Internal Server Error", 500)
 		return

@@ -56,18 +56,18 @@ func (m *EntryModel) Latest(limit int) ([]*Entry, error) {
 	return m.queryEntries(stmt, limit)
 }
 
-// LatestByType returns the most recent entries matching a specific type.
-func (m *EntryModel) LatestByType(entryType string, limit int) ([]*Entry, error) {
+// LatestThoughts returns the most recent thought-related entries.
+func (m *EntryModel) LatestThoughts(limit int) ([]*Entry, error) {
 	stmt := `SELECT id, title, type, content, url, created_at FROM entries
-	WHERE type = ? ORDER BY created_at DESC LIMIT ?`
-	return m.queryEntries(stmt, entryType, limit)
+	WHERE type IN ('thought', 'thought_admin', 'thought_stationai') ORDER BY created_at DESC LIMIT ?`
+	return m.queryEntries(stmt, limit)
 }
 
-// LatestExcluded returns the most recent entries EXCLUDING a specific type.
-func (m *EntryModel) LatestExcluded(excludedType string, limit int) ([]*Entry, error) {
+// MediaEntries returns the most recent non-thought entries.
+func (m *EntryModel) MediaEntries(limit int) ([]*Entry, error) {
 	stmt := `SELECT id, title, type, content, url, created_at FROM entries
-	WHERE type != ? ORDER BY created_at DESC LIMIT ?`
-	return m.queryEntries(stmt, excludedType, limit)
+	WHERE type NOT IN ('thought', 'thought_admin', 'thought_stationai') ORDER BY created_at DESC LIMIT ?`
+	return m.queryEntries(stmt, limit)
 }
 
 // Helper method to execute a query returning multiple entries
