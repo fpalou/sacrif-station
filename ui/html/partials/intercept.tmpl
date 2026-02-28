@@ -1,4 +1,4 @@
-<div class="intercept-container glitch-anim" id="intercept-display">
+<div class="intercept-container glitch-anim" id="intercept-module">
     <div class="intercept-header">
         <span class="warning-text">>> WARNING: SIGNAL DEGRADED</span>
         <span class="type-icon">[sys.intercept]</span>
@@ -9,7 +9,7 @@
         <p>{{.Content}}</p>
     </div>
     <button class="close-intercept-btn" 
-            hx-on:click="document.getElementById('intercept-display').remove()">
+            hx-on:click="document.getElementById('intercept-module').remove()">
         [Close Connection]
     </button>
 </div>

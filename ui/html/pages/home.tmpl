@@ -9,11 +9,10 @@
     
     <div style="margin-top: 2rem;">
         <ul style="list-style-type: none; padding-left: 0;">
-            <li style="margin-bottom: 2rem;">
-                <button class="intercept-btn" hx-get="/intercept" hx-target="#intercept-display" hx-swap="innerHTML">
+            <li style="margin-bottom: 2rem;" id="intercept-module">
+                <button class="intercept-btn" hx-get="/intercept" hx-target="#intercept-module" hx-swap="outerHTML">
                     [ > INTERCEPT SIGNAL < ]
                 </button>
-                <div id="intercept-display"></div>
             </li>
             <li style="margin-bottom: 1rem;">
                 <a href="/media" style="font-size: 1.2rem; font-weight: bold; border-left: 3px solid #e74c3c; padding-left: 10px;">>> Media Compendium Sector</a>
