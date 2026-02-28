@@ -1,0 +1,96 @@
+<div class="intercept-container glitch-anim" id="intercept-display">
+    <div class="intercept-header">
+        <span class="warning-text">>> WARNING: SIGNAL DEGRADED</span>
+        <span class="type-icon">[sys.intercept]</span>
+        <time class="thought-date">{{.CreatedAt.Format "Jan 02, 2006 at 15:04"}}</time>
+    </div>
+    <h3 class="intercept-title">{{.Title}}</h3>
+    <div class="intercept-content">
+        <p>{{.Content}}</p>
+    </div>
+    <button class="close-intercept-btn" 
+            hx-on:click="document.getElementById('intercept-display').remove()">
+        [Close Connection]
+    </button>
+</div>
+
+<style>
+    .intercept-container {
+        border: 1px solid #e74c3c;
+        background: rgba(231, 76, 60, 0.05);
+        padding: 1.5rem;
+        margin: 2rem 0;
+        position: relative;
+        box-shadow: 0 0 15px rgba(231, 76, 60, 0.1);
+        overflow: hidden;
+    }
+    
+    .intercept-container::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; height: 1px;
+        background: #e74c3c;
+        box-shadow: 0 0 5px #e74c3c;
+    }
+
+    .intercept-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: 'Courier Prime', monospace;
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px dashed rgba(231, 76, 60, 0.3);
+        padding-bottom: 0.5rem;
+    }
+
+    .warning-text {
+        color: #e74c3c;
+        animation: blink 2s infinite;
+    }
+
+    .intercept-title {
+        color: #e74c3c;
+        font-family: 'Courier Prime', monospace;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        text-shadow: 2px 0 0 rgba(255,0,0,0.5), -2px 0 0 rgba(0,255,255,0.5);
+    }
+
+    .intercept-content {
+        color: #e0e0e0;
+        font-family: 'IBM Plex Mono', monospace;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+    .close-intercept-btn {
+        background: transparent;
+        border: 1px solid #e74c3c;
+        color: #e74c3c;
+        padding: 0.5rem 1rem;
+        margin-top: 1.5rem;
+        font-family: 'Courier Prime', monospace;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .close-intercept-btn:hover {
+        background: #e74c3c;
+        color: #121212;
+    }
+
+    .glitch-anim {
+        animation: scanline 8s linear infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+
+    @keyframes scanline {
+        0% { background-position: 0 0; }
+        100% { background-position: 0 100%; }
+    }
+</style>

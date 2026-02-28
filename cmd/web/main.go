@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/federicopalou/sacrif-station/internal/models"
+	"github.com/federicopalou/sacrif-station/internal/utils"
 	"github.com/gomarkdown/markdown"
 	"github.com/joho/godotenv"
 	_ "modernc.org/sqlite"
@@ -93,6 +94,9 @@ func main() {
 
 	// Define scraper route
 	mux.HandleFunc("GET /scraper", app.scraperHandler)
+
+	// Define intercept route
+	mux.HandleFunc("GET /intercept", app.interceptHandler)
 
 	log.Println("Starting server on :4000")
 	err = http.ListenAndServe(":4000", mux)
@@ -222,6 +226,38 @@ func (app *application) scraperHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = ts.ExecuteTemplate(w, "base", latestItems)
+	if err != nil {
+		http.Error(w, "Internal Server Error", 500)
+	}
+}
+
+// interceptHandler fetches a random entry, corrupts it, and returns the HTML partial
+func (app *application) interceptHandler(w http.ResponseWriter, r *http.Request) {
+	entry, err := app.entries.RandomEntry()
+	if err != nil {
+		// Even if it fails, let's return a fake corrupted error string to stay in character
+		w.Header().Set("Content-Type", "text/html")
+		w.Write([]byte(`<div class="intercept-container"><h3 class="intercept-title">` + utils.CorruptText("CRITICAL DATABASE FAILURE", 80) + `</h3></div>`))
+		return
+	}
+
+	// Corrupt the title directly
+	entry.Title = utils.CorruptText(entry.Title, 15) // Light corruption on title
+
+	// For the content, since it might be markdown, we first grab the raw text
+	rawContent := utils.CorruptText(entry.Content, 20) // Medium corruption on content
+
+	// And then we render it as markdown so backticks/headers still attempt to format
+	entry.Content = string(markdown.ToHTML([]byte(rawContent), nil, nil))
+
+	ts, err := template.ParseFiles("./ui/html/partials/intercept.tmpl")
+	if err != nil {
+		http.Error(w, "Internal Server Error", 500)
+		return
+	}
+
+	// We execute the intercept.tmpl partial directly, bypassing the "base" template
+	err = ts.Execute(w, entry)
 	if err != nil {
 		http.Error(w, "Internal Server Error", 500)
 	}

@@ -70,6 +70,18 @@ func (m *EntryModel) MediaEntries(limit int) ([]*Entry, error) {
 	return m.queryEntries(stmt, limit)
 }
 
+// RandomEntry returns a single random entry from the database.
+func (m *EntryModel) RandomEntry() (*Entry, error) {
+	stmt := `SELECT id, title, type, content, url, created_at FROM entries ORDER BY RANDOM() LIMIT 1`
+
+	e := &Entry{}
+	err := m.DB.QueryRow(stmt).Scan(&e.ID, &e.Title, &e.Type, &e.Content, &e.URL, &e.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
 // Helper method to execute a query returning multiple entries
 func (m *EntryModel) queryEntries(stmt string, args ...any) ([]*Entry, error) {
 	rows, err := m.DB.Query(stmt, args...)
